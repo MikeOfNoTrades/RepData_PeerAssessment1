@@ -96,34 +96,18 @@ We will create a new factor variable in the dataset with two levels – “weekd
 
 ```{r weekends_and_weekdays}
 p1_data_complete <- p1_data[complete.cases(p1_data), ]
-p1_data_days <- mutate(p1_data_complete, weekend =  chron::is.weekend(as.Date(p1_data[2,2])))
+p1_data_days <- mutate(p1_data_complete, weekend =  chron::is.weekend(as.Date(p1_data_complete$date)))
 p1_data_days$weekend <- as.factor(ifelse(p1_data_days$weekend == TRUE, "weekend", "weekday"))
 
 #p1_data_complete <- p1_data[complete.cases(p1_data), ]
-#steps_per_interval <- group_by(p1_data_days, interval) 
-#summary_spi <- summarize(steps_per_interval, AV_STEPS = mean(steps, na.rm = TRUE), weekend)
-#max_av_steps <- max(summary_spi$AV_STEPS)
-#max_int_row <- filter(summary_spi, AV_STEPS == max_av_steps)
-#max_int <- max_int_row$interval
-#ggplot(data=summary_spi, aes(x=interval, y=AV_STEPS), na.omit()) +
-#     geom_line() +
-#     ggtitle("Average Daily Activity Pattern") +
-#     labs(x="5 minute interval",y="average steps taken")
-
-p1_data_complete <- p1_data[complete.cases(p1_data), ]
-p1_data_days <- mutate(p1_data_complete, weekend =  chron::is.weekend(as.Date(p1_data[2,2])))
-p1_data_days$weekend <- as.factor(ifelse(p1_data_days$weekend == TRUE, "weekend", "weekday"))
+#p1_data_days$weekend <- as.factor(ifelse(p1_data_days$weekend == TRUE, "weekend", "weekday"))
 #steps_per_interval <- group_by(p1_data_complete, interval) 
 steps_per_interval <- group_by(p1_data_days, interval, weekend) 
 summary_spi <- summarize(steps_per_interval, AV_STEPS = mean(steps, na.rm = TRUE))
 
-ggplot(data=summary_spi, aes(x=interval, y=AV_STEPS), group = weekend, na.omit()) +
-     geom_line() +
-     ggtitle("Average Daily Activity Pattern") +
-     labs(x="5 minute interval",y="average steps taken")
 # panel plot
 library(lattice)
-xyplot(AV_STEPS~interval | factor(weekend), data=summary_spi, pch=19,
+xyplot(AV_STEPS~interval | weekend, data=summary_spi, pch=19,
                 main="Average Daily Activity Pattern - weekdays vs weekends", 
       xlab="5 minute interval",  ylab="average steps taken",layout=c(1,2),type="l")
 ```
