@@ -35,6 +35,9 @@ steps_per_date <- summarize(steps_per_date, STEPS = sum(steps, na.rm = TRUE))
 hist(steps_per_date$STEPS, main="Steps Taken per Day", xlab="Number of Steps per Day")
 mean_steps <- mean(steps_per_date$STEPS)
 median_steps <- median(steps_per_date$STEPS)
+mean(steps_per_date$STEPS)
+median(steps_per_date$STEPS)
+
 ```
 Mean steps per day: `r mean_steps`    
 Median steps per day: `r median_steps`
