@@ -22,7 +22,6 @@ The dataset is stored in a comma-separated-value (CSV) file and there are a tota
 ###Get Data
 
 ```{r get_data}
-setwd(dir = "~/work/data/reproducible_research/RepData_PeerAssessment1/")
 p1_data <- read.csv("activity.csv")
 ```
 
