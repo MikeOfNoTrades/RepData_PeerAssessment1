@@ -1,7 +1,7 @@
 ---
-title: "Project1"
+title: "Reproducable Research: Project1"
 author: "MikeOfNoTrades"
-date: '2015-12-17'
+date: '2016-01-04'
 output: html_document
 ---
 ## Data Description
@@ -23,6 +23,7 @@ The dataset is stored in a comma-separated-value (CSV) file and there are a tota
 
 
 ```r
+setwd("/home/mikey/work/data/reproducible_research/RepData_PeerAssessment1/")
 p1_data <- read.csv("activity.csv")
 ```
 
@@ -69,6 +70,14 @@ summary_spi <- summarize(steps_per_interval, AV_STEPS = mean(steps, na.rm = TRUE
 max_av_steps <- max(summary_spi$AV_STEPS)
 max_int_row <- filter(summary_spi, AV_STEPS == max_av_steps)
 max_int <- max_int_row$interval
+max_int
+```
+
+```
+## [1] 835
+```
+
+```r
 ggplot(data=summary_spi, aes(x=interval, y=AV_STEPS), na.omit()) +
      geom_line() +
      ggtitle("Average Daily Activity Pattern") +
@@ -113,7 +122,7 @@ int_na
   
 the steps variable is the only variable to contain NAs, with 2304 NAs.  
   
-As a solution to this problem, we will fill each NA with mean for that 5-minute interval.  
+As a solution to this problem, we will fill each NA with the mean for that 5-minute interval.  
 
 
 ```r
@@ -135,7 +144,7 @@ median_steps <- median(steps_per_date$STEPS)
 Mean steps per day: 1.0766189 &times; 10<sup>4</sup>    
 Median steps per day: 1.0766189 &times; 10<sup>4</sup>
 
-As we can see, imputing values raised the number of stpes per day.
+As we can see, imputing values raised the number of steps per day.
 
 ###Differences in activity patterns between weekdays and weekends
 
@@ -147,9 +156,6 @@ p1_data_complete <- p1_data[complete.cases(p1_data), ]
 p1_data_days <- mutate(p1_data_complete, weekend =  chron::is.weekend(as.Date(p1_data_complete$date)))
 p1_data_days$weekend <- as.factor(ifelse(p1_data_days$weekend == TRUE, "weekend", "weekday"))
 
-#p1_data_complete <- p1_data[complete.cases(p1_data), ]
-#p1_data_days$weekend <- as.factor(ifelse(p1_data_days$weekend == TRUE, "weekend", "weekday"))
-#steps_per_interval <- group_by(p1_data_complete, interval) 
 steps_per_interval <- group_by(p1_data_days, interval, weekend) 
 summary_spi <- summarize(steps_per_interval, AV_STEPS = mean(steps, na.rm = TRUE))
 
